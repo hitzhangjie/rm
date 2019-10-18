@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"os/exec"
@@ -17,14 +18,53 @@ func NewRmCmd() *RmCmd {
 		description: `
 rm [options] <target>...:
 	same as shell /bin/rm`,
-		flagSet:     nil,
+		flagSet:     newRmCmdFlagSet(),
 	}
 	return &RmCmd{c}
 }
 
+func newRmCmdFlagSet() *flag.FlagSet {
+	fs := flag.NewFlagSet("rm", flag.PanicOnError)
+
+	fs.Bool("f", false, "ignore nonexistent files and arguments, never prompt")
+	fs.Bool("force", false, "ignore nonexistent files and arguments, never prompt")
+
+	fs.Bool("i", false, "prompt before every removal")
+	fs.Bool("I", false, `
+prompt once before removing more than three files, or when  removing  recur-
+sively;  less  intrusive than -i, while still giving protection against most
+mistakes`)
+
+	fs.String("interactive", "WHEN", `
+prompt according to WHEN: never, once (-I), or always  (-i);  without  WHEN,
+prompt always`)
+	fs.Bool("one-file-system", false, `
+when  removing a hierarchy recursively, skip any directory that is on a file
+system different from that of the corresponding command line argument`)
+
+	fs.Bool("no-preserve-root", false, "do not treat '/' specially")
+	fs.Bool("preserve-root", false, `
+do not remove '/' (default); with 'all', reject any command line argument on
+a separate device from its parent`)
+
+	fs.Bool("r", false, "remove directories and their contents recursively")
+	fs.Bool("R", false, "remove directories and their contents recursively")
+
+	fs.Bool("d", false, "remove empty directories")
+	fs.Bool("v", false, "explain what is being done")
+
+	fs.String("help", "", "display this help and exit")
+	fs.String("version", "", "output version information and exit")
+
+	return fs
+}
+
 func (c *RmCmd) Run(args []string) error {
-	n := len(args)
-	target := args[n-1]
+
+	c.flagSet.Parse(args)
+
+	targets := c.flagSet.Args()
+	target := targets[0]
 
 	var (
 		cwd string
