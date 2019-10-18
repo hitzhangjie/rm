@@ -25,18 +25,10 @@ rm [options] <target>...:
 }
 
 func newRmCmdFlagSet() *flag.FlagSet {
-	//fs := flag.NewFlagSet("rm", flag.PanicOnError)
 	fs := flag.NewFlagSet("rm", flag.ContinueOnError)
 
-	//fs.Bool("f", false, "ignore nonexistent files and arguments, never prompt")
-	//fs.Bool("force", false, "ignore nonexistent files and arguments, never prompt")
 	fs.BoolP("force", "f", false, "ignore nonexistent files and arguments, never prompt")
 
-	//fs.Bool("i", false, "prompt before every removal")
-	//fs.Bool("I", false, `
-	//prompt once before removing more than three files, or when  removing  recur-
-	//sively;  less  intrusive than -i, while still giving protection against most
-	//mistakes`)
 	fs.BoolP("i", "i", false, "prompt before every removal")
 	fs.BoolP("I", "I", false, `
 prompt once before removing more than three files, or when  removing  recur-
@@ -55,13 +47,9 @@ system different from that of the corresponding command line argument`)
 do not remove '/' (default); with 'all', reject any command line argument on
 a separate device from its parent`)
 
-	//fs.Bool("r", false, "remove directories and their contents recursively")
-	//fs.Bool("R", false, "remove directories and their contents recursively")
 	fs.BoolP("r", "r", false, "remove directories and their contents recursively")
 	fs.BoolP("R", "R", false, "remove directories and their contents recursively")
 
-	//fs.Bool("d", false, "remove empty directories")
-	//fs.Bool("v", false, "explain what is being done")
 	fs.BoolP("d", "d", false, "remove empty directories")
 	fs.BoolP("v", "v", false, "explain what is being done")
 

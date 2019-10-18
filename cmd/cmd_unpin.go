@@ -26,7 +26,7 @@ rm unpin:
 func newUnpinCmdFlagSet() *flag.FlagSet {
 
 	fs := flag.NewFlagSet("unpin", flag.PanicOnError)
-	fs.Bool("r", false, "recursively if target is directory")
+	fs.BoolP("r", "r", false, "recursively if target is directory")
 
 	return fs
 }

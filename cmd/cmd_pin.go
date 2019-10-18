@@ -28,7 +28,7 @@ rm pin:
 func newPinCmdFlagSet() *flag.FlagSet {
 
 	fs := flag.NewFlagSet("pin", flag.PanicOnError)
-	fs.Bool("r", false, "recursively if target is directory")
+	fs.BoolP("r", "r", false, "recursively if target is directory")
 
 	return fs
 }
