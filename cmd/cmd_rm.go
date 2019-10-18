@@ -14,7 +14,9 @@ type RmCmd struct {
 
 func NewRmCmd() *RmCmd {
 	c := baseCmd{
-		description: "rm -r -f -i -... target",
+		description: `
+rm [options] <target>...:
+	same as shell /bin/rm`,
 		flagSet:     nil,
 	}
 	return &RmCmd{c}

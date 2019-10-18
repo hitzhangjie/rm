@@ -12,7 +12,8 @@ type HelpCmd struct {
 func NewHelpCmd() *HelpCmd {
 	c := baseCmd{
 		description: `
-rm help: display help info`,
+rm help: 
+	display help info`,
 		flagSet: nil,
 	}
 	return &HelpCmd{c}

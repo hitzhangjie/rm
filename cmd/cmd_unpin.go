@@ -13,7 +13,9 @@ type UnpinCmd struct {
 func newUnpinCmd() *UnpinCmd {
 
 	cmd := baseCmd{
-		description: `rm unpin: -r, unpin target recursively`,
+		description: `
+rm unpin: 
+	-r, unpin target recursively`,
 		flagSet:     newUnpinCmdFlagSet(),
 	}
 

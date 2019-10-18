@@ -15,7 +15,9 @@ type PinCmd struct {
 func NewPinCmd() *PinCmd {
 
 	cmd := baseCmd{
-		description: `rm pin: -r, pin target recursively`,
+		description: `
+rm pin: 
+	-r, pin target recursively`,
 		flagSet:     newPinCmdFlagSet(),
 	}
 
