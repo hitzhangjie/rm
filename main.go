@@ -21,7 +21,7 @@ func main() {
 	subcmd := cmd.SubCmd(os.Args[1])
 	if subcmd != nil {
 		if err := subcmd.Run(os.Args[2:]); err != nil {
-			fmt.Printf("subcmd `%s` error: %v\n", subcmd)
+			fmt.Printf("subcmd `%s` error: %v\n\n", subcmd)
 		}
 		return
 	}
