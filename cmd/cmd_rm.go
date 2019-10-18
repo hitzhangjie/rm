@@ -18,13 +18,14 @@ func NewRmCmd() *RmCmd {
 		description: `
 rm [options] <target>...:
 	same as shell /bin/rm`,
-		flagSet:     newRmCmdFlagSet(),
+		flagSet: newRmCmdFlagSet(),
 	}
 	return &RmCmd{c}
 }
 
 func newRmCmdFlagSet() *flag.FlagSet {
-	fs := flag.NewFlagSet("rm", flag.PanicOnError)
+	//fs := flag.NewFlagSet("rm", flag.PanicOnError)
+	fs := flag.NewFlagSet("rm", flag.ContinueOnError)
 
 	fs.Bool("f", false, "ignore nonexistent files and arguments, never prompt")
 	fs.Bool("force", false, "ignore nonexistent files and arguments, never prompt")
@@ -66,20 +67,14 @@ func (c *RmCmd) Run(args []string) error {
 	targets := c.flagSet.Args()
 
 	for _, target := range targets {
-
-		fmt.Println(target)
-
-		var (
-			cwd string
-			abs = target
-		)
+		//println(target)
+		abs := target
 
 		// convert target to absolute path
 		if !filepath.IsAbs(target) {
 			if dir, err := os.Getwd(); err != nil {
 				return err
 			} else {
-				cwd = dir
 				abs = filepath.Join(dir, target)
 			}
 		}
@@ -96,7 +91,16 @@ func (c *RmCmd) Run(args []string) error {
 		// if one `pinlock` found, that means some files is protected, fail
 		// if no `pinlock`s found, call /bin/rm to finish the task
 		if fin.IsDir() {
-			err := filepath.Walk(cwd, func(entry string, fin os.FileInfo, err error) error {
+			// firstly, check parent directory
+			pdir := filepath.Dir(abs)
+			p := filepath.Join(pdir, pinLock)
+			if fin, err := os.Lstat(p); err == nil && !fin.IsDir() {
+				//return fmt.Errorf("directory %s and files underneath, pined by %s", cwd, p)
+				return fmt.Errorf("pined: directory %s and files underneath", pdir)
+			}
+
+			// secondly, check target directory
+			err := filepath.Walk(abs, func(entry string, fin os.FileInfo, err error) error {
 				if strings.Contains(fin.Name(), pinLock) {
 					return fmt.Errorf("pined: directory %s and files underneath", filepath.Dir(entry))
 				}
@@ -106,20 +110,32 @@ func (c *RmCmd) Run(args []string) error {
 				return err
 			}
 		} else {
-			p := filepath.Join(cwd, pinLock)
+			dir := filepath.Dir(abs)
+			p := filepath.Join(dir, pinLock)
 			if fin, err := os.Lstat(p); err == nil && !fin.IsDir() {
 				//return fmt.Errorf("directory %s and files underneath, pined by %s", cwd, p)
-				return fmt.Errorf("pined: directory %s and files underneath", cwd)
+				return fmt.Errorf("pined: directory %s and files underneath", dir)
 			}
 		}
 
 		// call /bin/rm to delete
-		cmd := exec.Command("/bin/rm", args...)
-		if output, err := cmd.CombinedOutput(); err != nil {
-			return fmt.Errorf("%s, %s", err, string(output))
-		} else {
-			fmt.Println(string(output))
-		}
+		//
+		//cmd := exec.Command("/bin/rm", args...)
+		//if output, err := cmd.CombinedOutput(); err != nil {
+		//	return fmt.Errorf("%s, %s", err, string(output))
+		//} else {
+		//	fmt.Println(string(output))
+		//}
 	}
+
+	// all check passed, then call /bin/rm to delete
+	// this behavior is a little different from /bin/rm, but it's much secure
+	cmd := exec.Command("/bin/rm", args...)
+	if output, err := cmd.CombinedOutput(); err != nil {
+		return fmt.Errorf("%s, %s", err, string(output))
+	} else {
+		fmt.Println(string(output))
+	}
+
 	return nil
 }
