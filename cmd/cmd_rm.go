@@ -53,7 +53,7 @@ func (c *RmCmd) Run(args []string) error {
 	if fin.IsDir() {
 		err := filepath.Walk(cwd, func(entry string, fin os.FileInfo, err error) error {
 			if strings.Contains(fin.Name(), pinLock) {
-				return fmt.Errorf("directory %s and files underneath, pined by %s", filepath.Dir(entry), entry)
+				return fmt.Errorf("pined: directory %s and files underneath", filepath.Dir(entry))
 			}
 			return nil
 		})
@@ -63,7 +63,8 @@ func (c *RmCmd) Run(args []string) error {
 	} else {
 		p := filepath.Join(cwd, pinLock)
 		if fin, err := os.Lstat(p); err == nil && !fin.IsDir() {
-			return fmt.Errorf("directory %s and files underneath, pined by %s", cwd, p)
+			//return fmt.Errorf("directory %s and files underneath, pined by %s", cwd, p)
+			return fmt.Errorf("pined: directory %s and files underneath", cwd)
 		}
 	}
 
