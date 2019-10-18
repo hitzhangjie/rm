@@ -17,7 +17,7 @@ rm-safe is an alternative to shell /bin/rm, which supports `pin` or `unpin` oper
 # installation
 
 ```bash
-go install github.com/hitzhangjie/rm-safe
+go install github.com/hitzhangjie/rm
 ```
 
 `go install` will install `rm` to `$GOPATH/bin`, please make sure `$GOPATH/bin` appears before `/bin, /usr/bin` in `$PATH`.
