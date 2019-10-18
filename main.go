@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"github.com/hitzhangjie/rm/cmd"
+	"os"
 )
 
 func main() {
@@ -21,11 +21,10 @@ func main() {
 	subcmd := cmd.SubCmd(os.Args[1])
 	if subcmd != nil {
 		if err := subcmd.Run(os.Args[2:]); err != nil {
-			fmt.Printf("subcmd `%s` error: %v\n", subcmd)
+			fmt.Printf("subcmd `%s` error: %v\n", os.Args[1], err)
 		}
 		return
 	}
-
 
 	rmCmd := cmd.NewRmCmd()
 	if err := rmCmd.Run(os.Args[1:]); err != nil {

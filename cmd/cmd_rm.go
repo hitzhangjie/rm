@@ -59,6 +59,10 @@ a separate device from its parent`)
 	return fs
 }
 
+func (c *RmCmd) Name() string {
+	return "rm"
+}
+
 func (c *RmCmd) Run(args []string) error {
 
 	err := c.flagSet.Parse(args)

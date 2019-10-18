@@ -59,19 +59,15 @@ func (c *PinCmd) Run(args []string) error {
 		return err
 	}
 
-	target := c.flagSet.Args()
-
 	// cwd
 	cwd, err := os.Getwd()
 	if err != nil {
 		return err
 	}
 
-	if len(target) == 0 {
-		target = []string{cwd}
-	}
+	targets := c.flagSet.Args()
 
-	for _, t := range target {
+	for _, t := range targets {
 		// check whether `t` is absolute path
 		abs := t
 		if !filepath.IsAbs(t) {
