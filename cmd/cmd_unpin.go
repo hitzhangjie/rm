@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"flag"
+	//"flag"
+	flag "github.com/spf13/pflag"
 	"os"
 	"path/filepath"
 )
@@ -50,12 +51,15 @@ func (c *UnpinCmd) Run(args []string) error {
 	//println(c.flagSet.NFlag()) // 命令行解析时传递的命令行选项正确设置的个数（默认值的不算）
 	//println(c.flagSet.NArg()) // 命令行定义的参数解析完成后还剩下什么参数，比如rm pin hello，此时为1（hello），比如rm pin hello world，此时为2
 
-	recursive := c.flagSet.Lookup("r").Value.(flag.Getter).Get().(bool)
+	//recursive := c.flagSet.Lookup("r").Value.(flag.Getter).Get().(bool)
+	recursive, err := c.flagSet.GetBool("r")
+	if err != nil {
+		return err
+	}
 
 	target := c.flagSet.Args()
 
 	// cwd
-	var cwd string
 	cwd, err := os.Getwd()
 	if err != nil {
 		return err

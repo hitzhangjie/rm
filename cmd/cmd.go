@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"flag"
+	//"flag"
+	flag "github.com/spf13/pflag"
 )
 
 var cmds = []Commander{
