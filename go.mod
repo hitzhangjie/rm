@@ -1,3 +1,3 @@
-module github.com/hitzhangjie/rm
+module rm
 
 go 1.12
