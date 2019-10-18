@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"rm/cmd"
+	"github.com/hitzhangjie/rm/cmd"
 )
 
 func main() {
