@@ -26,6 +26,11 @@ func (c *HelpCmd) Name() string {
 func (c *HelpCmd) Run(args []string) error {
 	buf := strings.Builder{}
 
+	buf.WriteString(`hitzhangjie/rm is an security-enhanced version of /bin/rm, 
+which could avoid the deletion of files by mistake.`)
+
+	buf.WriteString("\n")
+
 	for _, v := range cmds {
 		buf.WriteString(v.Description() + "\n")
 	}
